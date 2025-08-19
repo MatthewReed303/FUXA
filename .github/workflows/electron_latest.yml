@@ -25,7 +25,7 @@ jobs:
         npm config rm proxy
         npm config rm https-proxy
     - name: Set npm registry to HTTP
-      run: npm config set registry http://registry.npmjs.org
+      run: npm config set registry https://registry.npmjs.org
     - name: Set npm fetch retries
       run: |
         npm config set fetch-retries 5
