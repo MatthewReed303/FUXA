@@ -1,5 +1,8 @@
 name: Build FUXA Electron App (Latest)
 on:
+  #push:
+    #branches:
+  #pull_request:
   workflow_dispatch:
 jobs:
   build:
@@ -24,25 +27,17 @@ jobs:
       run: |
         npm config rm proxy
         npm config rm https-proxy
-    - name: Set npm registry to HTTP
-      run: npm config set registry https://registry.npmjs.org
-    - name: Set npm fetch retries
-      run: |
-        npm config set fetch-retries 5
-        npm config set fetch-retry-factor 10
-        npm config set fetch-retry-mintimeout 20000
-        npm config set fetch-retry-maxtimeout 120000
     - name: Install server dependencies
-      run: for i in {1..5}; do npm install && break || sleep 10; done
+      run: npm install
       working-directory: ./server
     - name: Install client dependencies
-      run: for i in {1..5}; do npm install && break || sleep 10; done
+      run: npm install
       working-directory: ./client
     - name: Build client
       run: npm run build -- --configuration=production
       working-directory: ./client
     - name: Install app dependencies
-      run: for i in {1..5}; do npm install && break || sleep 10; done
+      run: npm install
       working-directory: ./app
     - name: Copy server and client build to app
       run: |
@@ -50,6 +45,8 @@ jobs:
         mkdir -p app/client/dist
         cp -r server/. app/server/
         cp -r client/dist/. app/client/dist
+      #ls -R app/server
+      #ls -R app/client/dist
       shell: bash
     - name: Package for Windows
       if: matrix.os == 'windows-latest' && matrix.arch == 'x64'
