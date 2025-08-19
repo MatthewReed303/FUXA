@@ -1,8 +1,5 @@
 name: Build FUXA Electron App (Latest)
 on:
-  #push:
-    #branches:
-  #pull_request:
   workflow_dispatch:
 jobs:
   build:
@@ -17,85 +14,116 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
+
     - name: Clear npm cache
       run: npm cache clean --force
+
     - name: Remove proxy configurations
       run: |
         npm config rm proxy
         npm config rm https-proxy
+
     - name: Set npm registry to HTTPS
       run: npm config set registry https://registry.npmjs.org
+
     - name: Set npm fetch retries
       run: |
         npm config set fetch-retries 5
         npm config set fetch-retry-factor 10
         npm config set fetch-retry-mintimeout 20000
         npm config set fetch-retry-maxtimeout 120000
-    - name: Install server dependencies
+
+    - name: Install server dependencies (cross-platform)
       run: |
-        for i in 1 2 3; do
-          npm install && break
+        for attempt in 1 2 3; do
+          npm install && exit 0
           sleep 10
         done
+        exit 1
       working-directory: ./server
-    - name: Install client dependencies
+      shell: bash
+
+    - name: Install client dependencies (cross-platform)
       run: |
-        for i in 1 2 3; do
-          npm install && break
+        for attempt in 1 2 3; do
+          npm install && exit 0
           sleep 10
         done
+        exit 1
       working-directory: ./client
+      shell: bash
+
     - name: Build client
       run: npm run build -- --configuration=production
       working-directory: ./client
-    - name: Install app dependencies
+
+    - name: Install app dependencies (cross-platform)
       run: |
-        for i in 1 2 3; do
-          npm install && break
+        for attempt in 1 2 3; do
+          npm install && exit 0
           sleep 10
         done
+        exit 1
       working-directory: ./app
-    - name: Copy server and client build to app
-      run: |
-        mkdir -p app/server
-        mkdir -p app/client/dist
-        cp -r server/. app/server/
-        cp -r client/dist/. app/client/dist
-      #ls -R app/server
-      #ls -R app/client/dist
       shell: bash
+
+    - name: Copy server and client build to app (cross-platform)
+      run: |
+        if [ "${{ runner.os }}" == "Windows" ]; then
+          mkdir app\\server
+          mkdir app\\client\\dist
+          xcopy server\\* app\\server\\ /E /I /Y
+          xcopy client\\dist\\* app\\client\\dist\\ /E /I /Y
+        else
+          mkdir -p app/server
+          mkdir -p app/client/dist
+          cp -r server/. app/server/
+          cp -r client/dist/. app/client/dist
+        fi
+      shell: bash
+      working-directory: .
+
     - name: Package for Windows
       if: matrix.os == 'windows-latest' && matrix.arch == 'x64'
       run: npx electron-builder --win nsis --x64
       working-directory: ./app
+
     - name: Package for Linux
       if: matrix.os == 'ubuntu-latest'
       run: npx electron-builder --linux appimage --${{ matrix.arch }}
       working-directory: ./app
+
     - name: Package for macOS
       if: matrix.os == 'macos-latest'
       run: npx electron-builder --mac dmg --${{ matrix.arch }}
       working-directory: ./app
-    - name: Prepare artifacts
+
+    - name: Prepare artifacts (cross-platform)
       run: |
-        mkdir -p artifacts
-        if [ "${{ matrix.os }}" = "windows-latest" ]; then
-          mv dist/*.exe artifacts/FUXA-windows-x64.exe
-        elif [ "${{ matrix.os }}" = "ubuntu-latest" ] && [ "${{ matrix.arch }}" = "x64" ]; then
+        if [ "${{ runner.os }}" == "Windows" ]; then
+          mkdir artifacts
+          move dist\\*.exe artifacts\\FUXA-windows-x64.exe
+        elif [ "${{ runner.os }}" == "Linux" ] && [ "${{ matrix.arch }}" == "x64" ]; then
+          mkdir -p artifacts
           mv dist/*.AppImage artifacts/FUXA-linux-x64.AppImage
-        elif [ "${{ matrix.os }}" = "ubuntu-latest" ] && [ "${{ matrix.arch }}" = "arm64" ]; then
+        elif [ "${{ runner.os }}" == "Linux" ] && [ "${{ matrix.arch }}" == "arm64" ]; then
+          mkdir -p artifacts
           mv dist/*.AppImage artifacts/FUXA-linux-arm64.AppImage
-        elif [ "${{ matrix.os }}" = "macos-latest" ] && [ "${{ matrix.arch }}" = "x64" ]; then
+        elif [ "${{ runner.os }}" == "macOS" ] && [ "${{ matrix.arch }}" == "x64" ]; then
+          mkdir -p artifacts
           mv dist/*.dmg artifacts/FUXA-macos-x64.dmg
-        elif [ "${{ matrix.os }}" = "macos-latest" ]; then
+        elif [ "${{ runner.os }}" == "macOS" ]; then
+          mkdir -p artifacts
           mv dist/*.dmg artifacts/FUXA-macos-arm64.dmg
         fi
       working-directory: ./app
       shell: bash
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
