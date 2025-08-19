@@ -36,16 +36,28 @@ jobs:
         npm config set fetch-retry-mintimeout 20000
         npm config set fetch-retry-maxtimeout 120000
     - name: Install server dependencies
-      run: npm install
+      run: |
+        for i in 1 2 3; do
+          npm install && break
+          sleep 10
+        done
       working-directory: ./server
     - name: Install client dependencies
-      run: npm install
+      run: |
+        for i in 1 2 3; do
+          npm install && break
+          sleep 10
+        done
       working-directory: ./client
     - name: Build client
       run: npm run build -- --configuration=production
       working-directory: ./client
     - name: Install app dependencies
-      run: npm install
+      run: |
+        for i in 1 2 3; do
+          npm install && break
+          sleep 10
+        done
       working-directory: ./app
     - name: Copy server and client build to app
       run: |
