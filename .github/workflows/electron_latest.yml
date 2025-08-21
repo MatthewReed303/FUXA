@@ -40,7 +40,7 @@ jobs:
         if [ "$RUNNER_OS" = "Linux" ]; then
           echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null || echo "Failed to set DNS, runner may override"
         elif [ "$RUNNER_OS" = "Windows" ]; then
-          powershell -Command "try { Set-DnsClientServerAddress -InterfaceAlias 'Ethernet' -ServerAddresses ('8.8.8.8') } catch { Write-Host 'Failed to set DNS, runner may override' }"
+          powershell -Command "try { $interfaces = Get-NetAdapter | Where-Object { $_.Status -eq 'Up' }; if ($interfaces) { Set-DnsClientServerAddress -InterfaceIndex $interfaces[0].InterfaceIndex -ServerAddresses ('8.8.8.8') } else { Write-Host 'No active network interfaces found' } } catch { Write-Host 'Failed to set DNS, runner may override' }"
         else
           # macOS: Use networksetup to set DNS (if permitted)
           if command -v networksetup >/dev/null 2>&1; then
