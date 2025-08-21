@@ -1,9 +1,11 @@
 name: Build FUXA Electron App (Latest)
+
 on:
   #push:
     #branches:
   #pull_request:
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -17,43 +19,31 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
-    - name: Enforce IPv4 Connectivity
-      run: |
-        echo "IPV4_ONLY=1" >> $GITHUB_ENV
-        if [ "$RUNNER_OS" = "Linux" ]; then
-          sudo sed -i 's/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/' /etc/gai.conf || echo "IPv4 precedence already set or gai.conf not modifiable"
-        elif [ "$RUNNER_OS" = "Windows" ]; then
-          powershell -Command "Set-Item -Path Env:IPV4_ONLY -Value 1"
-        else
-          # macOS: Attempt to set IPv4 preference via networksetup (if permitted) or env var
-          echo "export IPV4_ONLY=1" >> $GITHUB_ENV
-          if command -v networksetup >/dev/null 2>&1; then
-            sudo networksetup -setv4off VPN || echo "Failed to disable IPv6 on VPN (if any)"
-            echo "IPv4 preference set via networksetup (if supported)"
-          else
-            echo "networksetup not available, using IPV4_ONLY env var"
-          fi
-        fi
-        echo "Forcing IPv4 for network operations"
-      shell: bash
+
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
-        node-version: '20'
+        node-version: '18'
+
     - name: Clear npm cache
       run: npm cache clean --force
+
     - name: Install server dependencies
       run: npm install
       working-directory: ./server
+
     - name: Install client dependencies
       run: npm install
       working-directory: ./client
+
     - name: Build client
       run: npm run build -- --configuration=production
       working-directory: ./client
+
     - name: Install app dependencies
       run: npm install
       working-directory: ./app
+
     - name: Copy server and client build to app
       run: |
         mkdir -p app/server
@@ -63,18 +53,22 @@ jobs:
       #ls -R app/server
       #ls -R app/client/dist
       shell: bash
+
     - name: Package for Windows
       if: matrix.os == 'windows-latest' && matrix.arch == 'x64'
       run: npx electron-builder --win nsis --x64
       working-directory: ./app
+
     - name: Package for Linux
       if: matrix.os == 'ubuntu-latest'
       run: npx electron-builder --linux appimage --${{ matrix.arch }}
       working-directory: ./app
+
     - name: Package for macOS
       if: matrix.os == 'macos-latest'
       run: npx electron-builder --mac dmg --${{ matrix.arch }}
       working-directory: ./app
+
     - name: Prepare artifacts
       run: |
         mkdir -p artifacts
@@ -91,8 +85,9 @@ jobs:
         fi
       working-directory: ./app
       shell: bash
+
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: FUXA-${{ matrix.os }}-${{ matrix.arch }}
         path: app/artifacts/*
