@@ -20,13 +20,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Enforce IPv4 Connectivity
+      uses: ./.github/actions/force-ipv4
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
 
-    #- name: Clear npm cache
-    #  run: npm cache clean --force
+    - name: Clear npm cache
+      run: npm cache clean --force
 
     - name: Install server dependencies
       run: npm install
