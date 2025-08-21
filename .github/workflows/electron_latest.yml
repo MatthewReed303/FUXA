@@ -40,7 +40,7 @@ jobs:
         if [ "$RUNNER_OS" = "Linux" ]; then
           echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null || echo "Failed to set DNS, runner may override"
         elif [ "$RUNNER_OS" = "Windows" ]; then
-          powershell -Command "Set-DnsClientServerAddress -InterfaceAlias 'Ethernet' -ServerAddresses ('8.8.8.8') -ErrorAction SilentlyContinue || Write-Host 'Failed to set DNS, runner may override'"
+          powershell -Command "try { Set-DnsClientServerAddress -InterfaceAlias 'Ethernet' -ServerAddresses ('8.8.8.8') } catch { Write-Host 'Failed to set DNS, runner may override' }"
         else
           # macOS: Use networksetup to set DNS (if permitted)
           if command -v networksetup >/dev/null 2>&1; then
@@ -60,16 +60,16 @@ jobs:
     - name: Set npm registry to mirror
       run: npm config set registry https://registry.npmmirror.com
     - name: Install server dependencies
-      run: for i in {1..5}; do npm install && break || sleep 15; done
+      run: npm install
       working-directory: ./server
     - name: Install client dependencies
-      run: for i in {1..5}; do npm install && break || sleep 15; done
+      run: npm install
       working-directory: ./client
     - name: Build client
       run: npm run build -- --configuration=production
       working-directory: ./client
     - name: Install app dependencies
-      run: for i in {1..5}; do npm install && break || sleep 15; done
+      run: npm install
       working-directory: ./app
     - name: Copy server and client build to app
       run: |
