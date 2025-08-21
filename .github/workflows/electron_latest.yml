@@ -23,9 +23,16 @@ jobs:
         if [ "$RUNNER_OS" = "Linux" ]; then
           sudo sed -i 's/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/' /etc/gai.conf || echo "IPv4 precedence already set or gai.conf not modifiable"
         elif [ "$RUNNER_OS" = "Windows" ]; then
-          echo "Set-Item -Path Env:IPV4_ONLY -Value 1" | powershell -Command
+          powershell -Command "Set-Item -Path Env:IPV4_ONLY -Value 1"
         else
+          # macOS: Attempt to set IPv4 preference via networksetup (if permitted) or env var
           echo "export IPV4_ONLY=1" >> $GITHUB_ENV
+          if command -v networksetup >/dev/null 2>&1; then
+            sudo networksetup -setv4off VPN || echo "Failed to disable IPv6 on VPN (if any)"
+            echo "IPv4 preference set via networksetup (if supported)"
+          else
+            echo "networksetup not available, using IPV4_ONLY env var"
+          fi
         fi
         echo "Forcing IPv4 for network operations"
       shell: bash
