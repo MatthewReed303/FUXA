@@ -16,7 +16,7 @@ jobs:
             arch: arm64
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Enforce IPv4 Connectivity
       run: |
         echo "IPV4_ONLY=1" >> $GITHUB_ENV
