@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { TableCell, TableCellType, TableType } from '../../../../../_models/hmi';
 import { ProjectService } from '../../../../../_services/project.service';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { OdbcBrowserComponent } from '../../../../../odbc-browser/odbc-browser.component';
 
 @Component({
