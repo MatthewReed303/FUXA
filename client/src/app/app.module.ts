@@ -1,9 +1,9 @@
 // the start/root module that tells Angular how to assemble the application.
 
 import { NgModule } from '@angular/core';
-import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -148,9 +148,6 @@ import { IframePropertyComponent } from './gauges/controls/html-iframe/iframe-pr
 import { TablePropertyComponent } from './gauges/controls/html-table/table-property/table-property.component';
 import { TableCustomizerComponent } from './gauges/controls/html-table/table-customizer/table-customizer.component';
 import { DataTableComponent } from './gauges/controls/html-table/data-table/data-table.component';
-import { HtmlSchedulerComponent } from './gauges/controls/html-scheduler/html-scheduler.component';
-import { SchedulerComponent } from './gauges/controls/html-scheduler/scheduler/scheduler.component';
-import { SchedulerPropertyComponent } from './gauges/controls/html-scheduler/scheduler-property/scheduler-property.component';
 import { ReportListComponent } from './reports/report-list/report-list.component';
 import { ReportEditorComponent } from './reports/report-editor/report-editor.component';
 import { DataConverterService } from './_services/data-converter.service';
@@ -197,7 +194,6 @@ import { FlexWidgetPropertyComponent } from './gauges/gauge-property/flex-widget
 import { GraphSourceEditComponent } from './editor/graph-config/graph-source-edit/graph-source-edit.component';
 import { LibWidgetsComponent } from './resources/lib-widgets/lib-widgets.component';
 import { TableCustomizerCellEditComponent } from './gauges/controls/html-table/table-customizer/table-customizer-cell-edit/table-customizer-cell-edit.component';
-import { OdbcBrowserComponent } from './odbc-browser/odbc-browser.component';
 import { TableAlarmsComponent } from './gauges/controls/html-table/table-alarms/table-alarms.component';
 import { TableReportsComponent } from './gauges/controls/html-table/table-reports/table-reports.component';
 import { ReportsService } from './_services/reports.service';
@@ -222,15 +218,6 @@ import { LanguageTextPropertyComponent } from './language/language-text-property
 import { LanguageService } from './_services/language.service';
 import { KioskWidgetsComponent } from './resources/kiosk-widgets/kiosk-widgets.component';
 import { ClientScriptAccessComponent } from './editor/client-script-access/client-script-access.component';
-import { TagPropertyEditWebcamComponent } from './device/tag-property/tag-property-edit-webcam/tag-property-edit-webcam.component';
-import { EditPlaceholderComponent } from './gui-helpers/edit-placeholder/edit-placeholder.component';
-import { DeviceAdapterService } from './device-adapter/device-adapter.service';
-import { VideoPropertyComponent } from './gauges/controls/html-video/video-property/video-property.component';
-import { InputPropertyComponent } from './gauges/controls/html-input/input-property/input-property.component';
-import { TagPropertyEditMelsecComponent } from './device/tag-property/tag-property-edit-melsec/tag-property-edit-melsec.component';
-import { SchedulerConfirmDialogComponent } from './gauges/controls/html-scheduler/scheduler-confirm-dialog/scheduler-confirm-dialog.component';
-import { MatIconRegistry } from '@angular/material/icon';
-import { NodeRedFlowsComponent } from './integrations/node-red/node-red-flows/node-red-flows.component';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -242,8 +229,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
     touchendHideDelay: 500,
 };
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         HomeComponent,
         EditorComponent,
         HeaderComponent,
@@ -263,7 +249,6 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         TagPropertyEditEthernetipComponent,
         TagPropertyEditADSclientComponent,
         TagPropertyEditGpioComponent,
-        TagPropertyEditMelsecComponent,
         TagOptionsComponent,
         TopicPropertyComponent,
         DevicePropertyComponent,
@@ -282,14 +267,12 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         ViewPropertyComponent,
         DialogLinkProperty,
         EditNameComponent,
-        EditPlaceholderComponent,
         ConfirmDialogComponent,
         DialogInfo,
         DaterangeDialogComponent,
         GaugeBaseComponent,
         HtmlInputComponent,
         HtmlButtonComponent,
-        InputPropertyComponent,
         HtmlSelectComponent,
         HtmlChartComponent,
         HtmlGraphComponent,
@@ -378,7 +361,6 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         TablePropertyComponent,
         TableCustomizerComponent,
         TableCustomizerCellEditComponent,
-        OdbcBrowserComponent,
         TableAlarmsComponent,
         TableReportsComponent,
         DataTableComponent,
@@ -404,25 +386,15 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         LanguageTypePropertyComponent,
         LanguageTextPropertyComponent,
         LanguageTextListComponent,
-        ClientScriptAccessComponent,
-        TagPropertyEditWebcamComponent,
-        VideoPropertyComponent,
-        HtmlSchedulerComponent,
-        SchedulerComponent,
-        SchedulerPropertyComponent,
-        SchedulerConfirmDialogComponent,
-        NodeRedFlowsComponent,
+        ClientScriptAccessComponent
     ],
-    imports: [
-        BrowserModule,
+    bootstrap: [AppComponent], imports: [BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        HttpClientModule,
         routing,
         MaterialModule,
         BrowserAnimationsModule,
         ColorPickerModule,
-        AngularDraggableModule,
         MatSelectSearchModule,
         ToastrModule.forRoot({
             timeOut: 3000,
@@ -440,9 +412,8 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         NgChartsModule,
         CodemirrorModule,
         NgxDaterangepickerMd.forRoot(),
-        FrameworkModule
-    ],
-    providers: [
+        FrameworkModule,
+        AngularDraggableModule], providers: [
         // providersResourceService,
         ResClientService,
         ResWebApiService,
@@ -482,19 +453,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         ActionPropertyService,
         MapsLocationsService,
         LanguageService,
-        DeviceAdapterService,
-        {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults}
-    ],
-    bootstrap: [AppComponent]
-})
-export class AppModule {
-    constructor(
-        iconReg: MatIconRegistry,
-        sanitizer: DomSanitizer
-    ) {
-        iconReg.addSvgIcon('group', sanitizer.bypassSecurityTrustResourceUrl('/assets/images/group.svg'));
-        iconReg.addSvgIcon('to_bottom', sanitizer.bypassSecurityTrustResourceUrl('/assets/images/to-bottom.svg'));
-        iconReg.addSvgIcon('to_top', sanitizer.bypassSecurityTrustResourceUrl('/assets/images/to-top.svg'));
-        iconReg.addSvgIcon('nodered-flows', sanitizer.bypassSecurityTrustResourceUrl('/assets/images/nodered-icon.svg'));
-    }
-}
+        { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
+export class AppModule { }
