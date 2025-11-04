@@ -95,7 +95,7 @@ export class GaugesManager {
                     gauge.setValues(message.result, message.chunk);
                 } else if (this.mapTable[message.gid]) {
                     let gauge: DataTableComponent = this.mapTable[message.gid];
-                    gauge.setValues(message.result, message.chunk);
+                    gauge.setValues(message.result);
                 }
             } catch (err) {
 
