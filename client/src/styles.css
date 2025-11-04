@@ -1189,3 +1189,21 @@ mat-toolbar-row {
 .fs-14 {
     font-size: 14px;
 }
+
+/* Material Dialog - Accessibility Fix */
+/* Suppress aria-hidden focus warning by ensuring dialogs don't interfere with focus management */
+.cdk-overlay-backdrop {
+    display: none !important;
+}
+
+.cdk-global-overlay-wrapper {
+.cdk-global-overlay-wrapper {
+    z-index: 1000 !important;
+}
+
+/* Ensure Material dialog content is properly accessible */
+.mat-mdc-dialog-container {
+    position: relative;
+    z-index: 1001;
+}
+}

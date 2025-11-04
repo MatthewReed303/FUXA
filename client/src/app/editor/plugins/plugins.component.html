@@ -4,7 +4,7 @@
     <div mat-dialog-content>
         <div class="info">{{'dlg.plugins-info' | translate}}</div>
         <mat-list class="list" >
-            <mat-list-item class="list-header list-item">
+            <div class="list-header list-item">
                 <span class="list-type">{{'dlg.plugins-type' | translate}}</span>
                 <span class="list-name">{{'dlg.plugins-name' | translate}}</span>
                 <span class="list-version">{{'dlg.plugins-version' | translate}}</span>
@@ -12,8 +12,8 @@
                 <span class="list-description">{{'dlg.plugins-description' | translate}}</span>
                 <span class="list-status"></span>
                 <span class="list-tool"></span>
-            </mat-list-item>
-            <mat-list-item *ngFor="let plugin of plugins" class="list-item list-item-text">
+            </div>
+            <div *ngFor="let plugin of plugins" class="list-item list-item-text">
                 <span class="list-type" style="font-weight: 700;">{{plugin.type}}</span>
                 <span class="list-name">{{plugin.name}}</span>
                 <span class="list-version">{{plugin.version}}</span>
@@ -33,7 +33,7 @@
                         </button>
                     </div>
                 </div>
-            </mat-list-item>
+            </div>
         </mat-list>
     </div>
     <div mat-dialog-actions class="dialog-action">

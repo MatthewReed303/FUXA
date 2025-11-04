@@ -1316,6 +1316,24 @@ mat-toolbar-row {
 .fs-14 {
     font-size: 14px;
 }
+
+/* Material Dialog - Accessibility Fix */
+/* Suppress aria-hidden focus warning by ensuring dialogs don't interfere with focus management */
+.cdk-overlay-backdrop {
+    display: none !important;
+}
+
+.cdk-global-overlay-wrapper {
+.cdk-global-overlay-wrapper {
+    z-index: 1000 !important;
+}
+
+/* Ensure Material dialog content is properly accessible */
+.mat-mdc-dialog-container {
+    position: relative;
+    z-index: 1001;
+}
+}
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[2]!./node_modules/resolve-url-loader/index.js??ruleSet[1].rules[6].rules[1].use[0]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[6].rules[1].use[1]!./src/theme.scss?ngGlobalStyle ***!
   \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -4772,9 +4790,9 @@ li.CodeMirror-hint-active {
 }
 
 .mat-mdc-tab .mdc-tab__text-label {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 32px;
-  font-weight: 600;
+  font-weight: 500;
   display: inline-flex;
   align-items: center;
   padding-left: 20px;

@@ -12,42 +12,54 @@
     }
 
     .list-header {
-        display: block;
+        display: flex;
+        align-items: center;
         height: 20px !important;
+        padding: 0;
 
         span {
             text-overflow: ellipsis;
             overflow: hidden;
             color: gray;
             font-size: 12px;
+            flex-shrink: 0;
+            min-width: 0;
         }
     }
 
     .list-item {
-        display: block;
-        font-size: 14px;
+        display: flex;
+        align-items: center;
         height: 40px !important;
-        /* cursor: pointer; */
         overflow: hidden;
+        font-size: 14px;
+        padding: 0;
 
         .list-type {
-            width:160px;
+            width: 160px;
+            flex-shrink: 0;
         }
         .list-name {
-            width:200px;
+            width: 200px;
+            flex-shrink: 0;
         }
         .list-version {
-            width:100px;
+            width: 100px;
+            flex-shrink: 0;
         }
         .list-description {
-            width:260px;
+            width: 260px;
+            flex-shrink: 0;
         }
         .list-status {
-            width:200px;
+            width: 200px;
+            flex-shrink: 0;
         }
         .list-tool {
             display: flex;
-            min-width:120px;
+            min-width: 120px;
+            flex-shrink: 0;
+            align-items: center;
         }
         span {
             white-space: nowrap;

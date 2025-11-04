@@ -8,6 +8,7 @@
     .link {
         display:inline-block;
         vertical-align: bottom;
+        position: relative;
         .span-link {
             text-overflow:clip;
             white-space:nowrap;
@@ -19,8 +20,30 @@
             height:28px;
             width:28px;
             vertical-align: middle;
+            padding: 0 !important;
+            min-width: 0 !important;
+        }
+
+        mat-icon {
+            font-size: 20px !important;
+            line-height: 20px !important;
+            height: 20px !important;
+            width: 20px !important;
         }
     }
+}
+
+::ng-deep .flex-variable button.mat-mdc-icon-button {
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+}
+
+::ng-deep .flex-variable button.mat-mdc-icon-button .mat-mdc-button-persistent-ripple {
+    display: none !important;
+}
+
+:host {
     .input {
         margin-left: 0px;
     }

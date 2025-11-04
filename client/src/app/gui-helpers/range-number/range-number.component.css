@@ -11,10 +11,18 @@
 }
 
 .range-type-switch button {
-    margin-top: 11px;
+    margin-top: 18px;
     line-height: 30px;
-    height:30px; 
-    width:30px;
+    height: 30px !important;
+    width: 30px !important;
+    padding: 0 !important;
+    min-width: 0 !important;
+}
+
+.range-type-switch button span {
+    font-size: 14px;
+    line-height: 1;
+    display: block;
 }
 
 .boolean-selection {

@@ -71,6 +71,7 @@
         background-color: transparent;
         margin-right: -10px;
         margin-left: auto;
+        display: none !important; /* Hide completely but keep functional for internal logic */
     }
 
     .moka-toolbar-editor {
