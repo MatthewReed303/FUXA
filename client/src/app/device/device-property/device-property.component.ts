@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy, ViewChild } from '@angular/core';
-import { MatDialogRef as MatDialogRef, MAT_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { Subscription, delay } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -8,6 +8,7 @@ import { EndPointSettings, HmiService } from '../../_services/hmi.service';
 import { AppService } from '../../_services/app.service';
 import { ProjectService } from '../../_services/project.service';
 import { DeviceType, DeviceSecurity, MessageSecurityMode, SecurityPolicy, ModbusOptionType, ModbusReuseModeType } from './../../_models/device';
+import { OdbcBrowserComponent } from '../../odbc-browser/odbc-browser.component';
 
 @Component({
 	selector: 'app-device-property',
@@ -55,10 +56,11 @@ export class DevicePropertyComponent implements OnInit, OnDestroy {
 						 {text: '30 min', value: 60000 * 30},
 						 {text: '60 min', value: 60000 * 60}];
 
+    pollingWebCamType = this.pollingWebApiType.concat([{text: 'Disabled', value: -1}]);
+
 	pollingType = this.pollingPlcType;
 
 	isFuxaServer = false;
-	isWithPolling = true;
 	isToRemove = false;
 	propertyError = '';
 	propertyExpanded: boolean;
@@ -87,6 +89,7 @@ export class DevicePropertyComponent implements OnInit, OnDestroy {
 		private hmiService: HmiService,
         private translateService: TranslateService,
         private appService: AppService,
+		private dialog: MatDialog,
 		public dialogRef: MatDialogRef<DevicePropertyComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any) {
             this.projectService = data.projectService;
@@ -95,9 +98,6 @@ export class DevicePropertyComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.isToRemove = this.data.remove;
 		this.isFuxaServer = (this.data.device.type && this.data.device.type === DeviceType.FuxaServer) ? true : false;
-		if (this.appService.isClientApp || this.appService.isDemoApp) {
-			this.isWithPolling = false;
-		}
 		for (let key in DeviceType) {
 			if (!this.isFuxaServer && key !== DeviceType.FuxaServer) {
 				for (let idx = 0; idx < this.data.availableType.length; idx++) {
@@ -269,8 +269,10 @@ export class DevicePropertyComponent implements OnInit, OnDestroy {
 	}
 
 	onDeviceTypeChanged() {
-		if (this.data.device.type === DeviceType.WebAPI) {
+		if (this.data.device.type === DeviceType.WebAPI ) {
 			this.pollingType = this.pollingWebApiType;
+		} else if (this.data.device.type === DeviceType.WebCam) {
+            this.pollingType = this.pollingWebCamType;
 		} else {
 			this.pollingType = this.pollingPlcType;
 		}
@@ -351,6 +353,23 @@ export class DevicePropertyComponent implements OnInit, OnDestroy {
         event.stopPropagation();
     }
 
+	isWithPolling() {
+		if (this.data.device?.type === DeviceType.internal) {
+			return false;
+		}
+		if (this.appService.isClientApp || this.appService.isDemoApp) {
+			return false;
+		}
+		return true;
+	}
+
+	canEnable() {
+		if (this.isFuxaServer || this.data.device?.type === this.deviceType.internal) {
+			return false;
+		}
+		return true;
+    }
+
 	private securityModeToString(mode): string {
 		let secMode = MessageSecurityMode;
 		let result = '';
@@ -362,6 +381,28 @@ export class DevicePropertyComponent implements OnInit, OnDestroy {
 			this.translateService.get('device.security-signandencrypt').subscribe((txt: string) => { result = txt; });
 		}
 		return result;
+	}
+
+	/**
+	 * Open ODBC Browser dialog for database management
+	 */
+	onOpenOdbcBrowser() {
+		const dialogRef = this.dialog.open(OdbcBrowserComponent, {
+			width: '90vw',
+			height: '90vh',
+			maxWidth: '1400px',
+			data: {
+				deviceId: this.data.device.id,
+				selectColumn: false
+			}
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result && result.query) {
+				// Optional: Handle the returned query if needed
+				console.log('ODBC Browser closed with query:', result.query);
+			}
+		});
 	}
 }
 
