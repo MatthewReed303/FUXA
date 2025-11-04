@@ -9,9 +9,9 @@
         height: 100%;
     }
 
-    .mat-header-cell.mat-sort-header-sorted {
+    /* .mat-header-cell.mat-sort-header-sorted { */
         /* color: black; */
-    }
+    /* } */
 
     .mat-row {
         min-height: 34px;
@@ -60,7 +60,7 @@
     }
 
     .mat-column-select {
-        flex: 0 0 80px;
+        flex: 0 0 40px;
     }
 
     .my-header-filter ::ng-deep .mat-sort-header-content {
@@ -76,6 +76,7 @@
 
     .my-header-filter span {
         padding-left: 5px;
+    
     }
 
     .my-header-filter ::ng-deep .mat-sort-header-arrow {
@@ -85,7 +86,7 @@
     }
 
     .my-header-filter-input {
-        display: block;
+        display: block; 
         margin-top: 4px;
         margin-bottom: 6px;
         /* color: white; */
@@ -101,10 +102,4 @@
         border: 1px solid var(--formInputBorderFocus);
         background-color: var(--formInputBackgroundFocus);
     }
-
-    .table-wrap {
-        flex: 1 1 auto;
-        min-height: 0;   /* allows this area to actually shrink */
-        overflow: auto;  /* the table scrolls here */
-      }
 }

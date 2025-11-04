@@ -45,9 +45,9 @@
     height: 100%;
 }
   
-.mat-header-cell.mat-sort-header-sorted {
+/* .mat-header-cell.mat-sort-header-sorted { */
     /* color: black; */
-}
+/* } */
 
 .mat-header-row {
     top: 0;
