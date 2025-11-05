@@ -1,6 +1,6 @@
 :host {
     .container {
-        width: 340px;
+        width: 400px;
     }
 
     .block-input {
@@ -16,5 +16,9 @@
         display: block;
         max-height: 220px;
         overflow-y: auto;
+    }
+
+    button.inbk mat-icon {
+        color: inherit !important;
     }
 }

@@ -18,7 +18,7 @@ import { EditPlaceholderComponent } from '../../gui-helpers/edit-placeholder/edi
 @Component({
   selector: 'app-chart-config',
   templateUrl: './chart-config.component.html',
-  styleUrls: ['./chart-config.component.css']
+  styleUrls: ['./chart-config.component.scss']
 })
 export class ChartConfigComponent implements OnInit {
 
@@ -31,8 +31,7 @@ export class ChartConfigComponent implements OnInit {
     lineColor = Utils.lineColor;
 
     lineInterpolationType = [{ text: 'chart.config-interpo-linear', value: 0 }, { text: 'chart.config-interpo-stepAfter', value: 1 },
-                    { text: 'chart.config-interpo-stepBefore', value: 2 }, { text: 'chart.config-interpo-spline', value: 3 },
-                    { text: 'chart.config-interpo-none', value: 4 }];
+                    { text: 'chart.config-interpo-stepBefore', value: 2 }, { text: 'chart.config-interpo-spline', value: 3 }];
 
     constructor(
         public dialog: MatDialog,

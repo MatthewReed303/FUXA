@@ -7,14 +7,35 @@
         left: 0px;
         height: 40px;
         width: 100%;
-        text-align: center;
-        line-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
         border-bottom: 1px solid var(--headerBorder);
+        box-sizing: border-box;
+    }
+
+    .header-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        text-align: center;
+        justify-content: center;
     }
 
     .header-panel mat-icon {
         display: inline-block;
-        vertical-align: text-top;
+    }
+
+    .header-button-left,
+    .header-button-right {
+        flex-shrink: 0;
+    }
+
+    .header-button-left mat-icon,
+    .header-button-right mat-icon {
+        color: white !important;
     }
 
     .work-panel {

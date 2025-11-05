@@ -17,13 +17,13 @@ import { TutorialComponent } from '../help/tutorial/tutorial.component';
 import { TranslateService } from '@ngx-translate/core';
 import { EditNameComponent } from '../gui-helpers/edit-name/edit-name.component';
 
-const editorModeRouteKey = ['/editor', '/device', '/messages', '/language', '/users', '/userRoles', '/notifications', '/scripts', '/reports', '/materials', '/logs', '/events', '/mapsLocations', '/flows'];
-const saveFromEditorRouteKey = ['/device', '/messages', '/language', '/users', '/userRoles', '/notifications', '/scripts', '/reports', '/materials', '/logs', '/events', '/mapsLocations', '/flows'];
+const editorModeRouteKey = ['/editor', '/device', '/messages', '/language', '/users', '/userRoles', '/notifications', '/scripts', '/reports', '/materials', '/logs', '/events', '/mapsLocations'];
+const saveFromEditorRouteKey = ['/device', '/messages', '/language', '/users', '/userRoles', '/notifications', '/scripts', '/reports', '/materials', '/logs', '/events', '/mapsLocations'];
 
 @Component({
     selector: 'app-header',
     templateUrl: 'header.component.html',
-    styleUrls: ['header.component.css']
+    styleUrls: ['header.component.scss']
 })
 export class HeaderComponent implements AfterViewInit, OnDestroy {
 

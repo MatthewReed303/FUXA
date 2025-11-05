@@ -24,4 +24,17 @@
         margin-top: 5px;
         margin-bottom: 5px;
     }
+
+    // Layout the header sections inline
+    ::ng-deep flex-auth {
+        display: inline-block;
+        vertical-align: top;
+        margin-right: 20px;
+    }
+
+    ::ng-deep flex-head {
+        display: inline-block;
+        vertical-align: top;
+    }
 }
+

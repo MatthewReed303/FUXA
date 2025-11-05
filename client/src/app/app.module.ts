@@ -443,6 +443,9 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
     ],
     providers: [
         // providersResourceService,
+        provideHttpClient(
+            withInterceptorsFromDi()
+        ),
         ResClientService,
         ResWebApiService,
         ResDemoService,

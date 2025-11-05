@@ -1,15 +1,15 @@
 <div style="position: relative;">
     <h1 mat-dialog-title style="display:inline-block;cursor:move;" mat-dialog-draggable>{{'alarm.property-title' | translate}}</h1>
-    <mat-icon (click)="onNoClick()" style="float:right;margin-right:-10px;margin-top:-10px;color:gray;cursor:pointer;">clear</mat-icon>
+    <mat-icon (click)="onNoClick()" style="position:absolute;top:5px;right:5px;color:gray;cursor:pointer;">clear</mat-icon>
     <div mat-dialog-content *ngIf="data.editmode < 0">
         {{'msg.alarm-remove' | translate}} '{{data.alarm.name}}' ?
     </div>
     <div mat-dialog-content *ngIf="data.editmode >= 0">
-        <div style="display: block;width: 680px; padding-bottom: 20px;">
-            <div style="display: block;">
+        <div style="display: block; width: 100%; padding-bottom: 20px;">
+            <div style="display: block; margin-bottom: 10px;">
                 <flex-auth [name]="data.alarm.name" [permission]="property.permission" [permissionRoles]="property.permissionRoles" #flexauth></flex-auth>
             </div>
-            <div mat-dialog-content style="overflow: hidden; width:100%">
+            <div style="display: block;">
                 <flex-head [data]="data" [property]="property" #flexhead [withStaticValue]="false" [withBitmask]="true"></flex-head>
             </div>
         </div>

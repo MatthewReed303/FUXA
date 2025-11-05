@@ -1,8 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { ProjectService, SaveMode } from '../../../_services/project.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { SetupComponent } from '../../../editor/setup/setup.component';
 
 @Component({
     selector: 'app-node-red-flows',
@@ -22,7 +24,10 @@ export class NodeRedFlowsComponent implements OnInit, OnDestroy {
     constructor(
         private activeroute: ActivatedRoute,
         public sanitizer: DomSanitizer,
-        private projectService: ProjectService
+        private projectService: ProjectService,
+        @Optional() private dialogRef: MatDialogRef<NodeRedFlowsComponent>,
+        private dialog: MatDialog,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -38,6 +43,22 @@ export class NodeRedFlowsComponent implements OnInit, OnDestroy {
                 this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this._link);
             });
         }
+    }
+
+    onClose() {
+        if (this.dialogRef) {
+            this.dialogRef.close();
+        } else {
+            // If opened as a route, navigate to editor
+            this.router.navigate(['/editor']);
+        }
+    }
+
+    onSettings() {
+        // Open settings dialog
+        this.dialog.open(SetupComponent, {
+            position: { top: '60px' },
+        });
     }
 
     ngOnDestroy() {

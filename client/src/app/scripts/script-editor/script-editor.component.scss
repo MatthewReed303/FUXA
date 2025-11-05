@@ -6,7 +6,10 @@
     
     .panel-header {
         width: 100%;
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
     }
     
     .panel-footer {
@@ -16,19 +19,48 @@
     }
     
     .panel-function {
-        display: inline-block;
-        width: calc(100% - 90px);
+        display: flex;
+        align-items: center;
+        flex: 1;
         margin-top: 10px;
         font-family: monospace;
+        gap: 5px;
     }
     
     .panel-toolbar {
-        float: right;
+        display: flex;
+        gap: 5px;
+        flex-shrink: 0;
+    }
+
+    .panel-toolbar button mat-icon {
+        color: white !important;
     }
     
     .panel-code {
         width: 100%;
         --tab-height: 30px;
+        margin-top: 10px;
+    }
+
+    .editor-content-wrapper {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .code-container {
+        flex: 1;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .code-editor-wrapper {
+        width: 100%;
+    }
+
+    ::ng-deep .CodeMirror {
+        padding: 10px;
     }
     
     .system-function button {
@@ -94,10 +126,6 @@
         line-height: 20px;
         width: 100%;
     }
-    
-    .test-console .content {
-    }
-    
     
     .small-icon-button {
         width: 24px;
@@ -217,6 +245,16 @@
     
     .function-text {
         color:rgb(0, 110, 255);
+        line-height: 25px;
+    }
+
+    .function-name {
+        color: white;
+        line-height: 25px;
+    }
+
+    .function-syntax {
+        color: white;
         line-height: 25px;
     }
     
