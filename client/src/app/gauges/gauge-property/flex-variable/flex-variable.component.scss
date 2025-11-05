@@ -1,18 +1,14 @@
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
+    display: block;
     margin-bottom: 5px;
     .value {
         max-width: 100px;
-        margin-right: 10px;
+        margin-right: 18px;
     }
     .link {
         display:inline-block;
         vertical-align: bottom;
         position: relative;
-        margin-right: 0;
-        flex-shrink: 0;
         .span-link {
             text-overflow:clip;
             white-space:nowrap;
@@ -36,59 +32,20 @@
             color: white !important;
         }
     }
-    .input {
-        flex-shrink: 1 !important;
-        flex-grow: 0 !important;
-        flex-basis: auto !important;
-        display: inline-block !important;
-        vertical-align: bottom !important;
-        height: 28px !important;
-        line-height: 28px !important;
-    }
-
-    // Override my-form-field styles for input
-    .my-form-field.input {
-        display: inline-block !important;
-        vertical-align: bottom !important;
-        height: 28px !important;
-        line-height: 28px !important;
-    }
-}
-
-// Force deep override of my-form-field.input globally scoped
-:host ::ng-deep .container .my-form-field.input {
-    display: inline-flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    vertical-align: bottom !important;
-    height: 28px !important;
-    line-height: 28px !important;
-    gap: 4px !important;
-}
-
-:host ::ng-deep .container .my-form-field.input > span {
-    display: inline !important;
-    line-height: 28px !important;
-    vertical-align: center !important;
-    white-space: nowrap !important;
-    flex-shrink: 0 !important;
 }
 
 :host {
     .input {
-        margin-left: 0px !important;
-        vertical-align: bottom !important;
-        height: 28px !important;
-        line-height: 28px !important;
+        margin-left: 0px;
     }
 }
 
-:host ::ng-deep .group-label span {
+::ng-deep .group-label span {
     line-height: 28px;
     height: 28px;
 }
 
-:host ::ng-deep .option-label  {
+::ng-deep .option-label  {
 
     line-height: 28px !important;
     height: 28px !important;
@@ -97,13 +54,11 @@
         font-size: 13px;
     }
 }
-:host ::ng-deep .variable-input {
+::ng-deep .variable-input {
     font-size: 13px;
     min-width: 450px;
     vertical-align: unset !important;
     width: unset;
-    display: inline-flex !important;
-    flex-shrink: 1 !important;
 }
 
 .tag-link {
