@@ -472,7 +472,6 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
     Ui5Module,
     ParameterSetDialogComponent
     ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
         // providersResourceService,
         ResClientService,
