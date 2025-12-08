@@ -123,7 +123,9 @@ jobs:
 
     - name: Package for macOS
       if: matrix.os == 'macos-latest'
-      run: npx electron-builder --mac dmg --${{ matrix.arch }}
+      run: |
+        ulimit -n 4096
+        npx electron-builder --mac dmg --${{ matrix.arch }}
       working-directory: ./app/electron
 
     - name: Prepare artifacts
