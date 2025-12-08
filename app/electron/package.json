@@ -21,18 +21,7 @@
     "build": {
         "appId": "com.frangoteam.fuxa",
         "productName": "FUXA",
-        "asar": true,
-        "asarUnpack": [
-            "server/_appdata/**",
-            "server/_db/**",
-            "server/_images/**",
-            "server/_logs/**",
-            "server/_pkg/**",
-            "server/_reports/**",
-            "server/_webcam_snapshots/**",
-            "server/_widgets/**",
-            "server/_upload_files/**"
-        ],
+        "asar": false,
         "files": [
             "main.js",
             "*.html",

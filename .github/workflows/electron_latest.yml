@@ -124,7 +124,7 @@ jobs:
     - name: Package for macOS
       if: matrix.os == 'macos-latest'
       run: |
-        ulimit -n 4096
+        ulimit -n 16384 || ulimit -n 8192 || ulimit -n 4096
         npx electron-builder --mac dmg --${{ matrix.arch }}
       working-directory: ./app/electron
 
