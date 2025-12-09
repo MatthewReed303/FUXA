@@ -67,7 +67,8 @@
                     "arch": ["x64", "arm64"]
                 }
             ],
-            "icon": "icons/fuxa-logo.icns"
+            "icon": "icons/fuxa-logo.icns",
+            "asar": true
         }
     }
 }
