@@ -68,7 +68,8 @@
                 }
             ],
             "icon": "icons/fuxa-logo.icns",
-            "asar": true
+            "asar": true,
+            "extraResources": []
         }
     }
 }
