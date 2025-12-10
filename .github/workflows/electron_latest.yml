@@ -20,7 +20,7 @@ jobs:
             arch: x64
           - os: macos-latest
             arch: x64
-          - os: macos-15
+          - os: macos-latest
             arch: arm64
     steps:
     - name: Checkout code
@@ -36,6 +36,11 @@ jobs:
       run: |
         brew update
         brew install cairo pango pkg-config
+
+    - name: Set PKG_CONFIG_PATH for macOS
+      if: matrix.os == 'macos-latest'
+      run: echo "PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig:/opt/homebrew/share/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
+        export PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig:/opt/homebrew/share/pkgconfig:$PKG_CONFIG_PATH
 
     - name: Install system dependencies (Linux)
       if: matrix.os == 'ubuntu-latest'
