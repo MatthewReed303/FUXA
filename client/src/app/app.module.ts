@@ -479,9 +479,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         Ui5Module,
         ParameterSetDialogComponent
     ],
-        FrameworkModule
-    ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
         // providersResourceService,
         ResClientService,
@@ -526,8 +524,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         DeviceAdapterService,
         { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults },
         provideHttpClient(withInterceptorsFromDi())
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    ]
 })
 export class AppModule {
     constructor(
