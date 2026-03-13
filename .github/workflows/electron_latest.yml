@@ -114,6 +114,7 @@ jobs:
     - name: Package for Linux
       if: startsWith(matrix.os, 'ubuntu')
       run: |
+        ulimit -n 10240
         if [ "${{ matrix.arch }}" = "arm64" ]; then
           npx electron-builder --linux appimage --arm64
         else
@@ -123,7 +124,9 @@ jobs:
 
     - name: Package for macOS
       if: matrix.os == 'macos-latest'
-      run: npx electron-builder --mac dmg --${{ matrix.arch }}
+      run: |
+        ulimit -n 10240
+        npx electron-builder --mac dmg --${{ matrix.arch }}
       working-directory: ./app/electron
 
     - name: Prepare artifacts
