@@ -113,6 +113,8 @@ import { HtmlSelectComponent } from './gauges/controls/html-select/html-select.c
 import { HtmlChartComponent } from './gauges/controls/html-chart/html-chart.component';
 import { HtmlGraphComponent } from './gauges/controls/html-graph/html-graph.component';
 import { HtmlIframeComponent } from './gauges/controls/html-iframe/html-iframe.component';
+import { HtmlFileViewerComponent } from './gauges/controls/html-file-viewer/html-file-viewer.component';
+import { HtmlFileViewerRuntimeComponent } from './gauges/controls/html-file-viewer/html-file-viewer-runtime.component';
 import { HtmlBagComponent } from './gauges/controls/html-bag/html-bag.component';
 import { HtmlTableComponent } from './gauges/controls/html-table/html-table.component';
 import { HtmlSwitchComponent } from './gauges/controls/html-switch/html-switch.component';
@@ -155,6 +157,13 @@ import { SchedulerComponent } from './gauges/controls/html-scheduler/scheduler/s
 import { SchedulerPropertyComponent } from './gauges/controls/html-scheduler/scheduler-property/scheduler-property.component';
 import { ReportListComponent } from './reports/report-list/report-list.component';
 import { ReportEditorComponent } from './reports/report-editor/report-editor.component';
+import { ReportTypeSelectorComponent } from './reports/report-type-selector/report-type-selector.component';
+import { AdvancedReportEditorComponent } from './reports/advanced-report-editor/advanced-report-editor.component';
+import { ReportSettingsDialogComponent } from './reports/advanced-report-editor/report-settings-dialog.component';
+import { TemplateManagerDialogComponent } from './reports/advanced-report-editor/template-manager-dialog.component';
+import { TableConfigDialogComponent } from './reports/advanced-report-editor/table-config-dialog.component';
+import { FileExplorerDialogComponent } from './file-explorer/file-explorer-dialog.component';
+import { FileViewerPropertyComponent } from './gauges/controls/html-file-viewer/file-viewer-property/file-viewer-property.component';
 import { DataConverterService } from './_services/data-converter.service';
 import { ReportItemTextComponent } from './reports/report-editor/report-item-text/report-item-text.component';
 import { ReportItemTableComponent } from './reports/report-editor/report-item-table/report-item-table.component';
@@ -304,6 +313,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         HtmlChartComponent,
         HtmlGraphComponent,
         HtmlIframeComponent,
+        HtmlFileViewerRuntimeComponent,
         HtmlImageComponent,
         HtmlBagComponent,
         GaugeProgressComponent,
@@ -317,6 +327,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         PipePropertyComponent,
         SliderPropertyComponent,
         HtmlSwitchPropertyComponent,
+        FileViewerPropertyComponent,
         ShapesComponent,
         ProcEngComponent,
         ApeShapesComponent,
@@ -363,6 +374,12 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         ScriptModeComponent,
         ReportListComponent,
         ReportEditorComponent,
+        ReportTypeSelectorComponent,
+        AdvancedReportEditorComponent,
+        ReportSettingsDialogComponent,
+        TemplateManagerDialogComponent,
+        TableConfigDialogComponent,
+        FileExplorerDialogComponent,
         ScriptEditorParamComponent,
         LanguageTextListComponent,
         LogsViewComponent,
@@ -386,6 +403,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         GraphPropertyComponent,
         GraphBaseComponent,
         IframePropertyComponent,
+        FileViewerPropertyComponent,
         TablePropertyComponent,
         TableCustomizerComponent,
     TableCustomizerTypeEditComponent,
@@ -461,6 +479,9 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         Ui5Module,
         ParameterSetDialogComponent
     ],
+        FrameworkModule
+    ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
         // providersResourceService,
         ResClientService,
@@ -491,6 +512,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
         PipeComponent,
         SliderComponent,
         HtmlTableComponent,
+        HtmlFileViewerComponent,
         Dictionary,
         ModalPositionCache,
         Define,

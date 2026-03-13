@@ -30,6 +30,7 @@ import { MatTableModule as MatTableModule } from '@angular/material/table';
 import { MatTabsModule as MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule as MatTooltipModule } from '@angular/material/tooltip';
+import { MatTreeModule } from '@angular/material/tree';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
@@ -71,6 +72,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         MatTabsModule,
         MatToolbarModule,
         MatTooltipModule,
+        MatTreeModule,
     ],
     exports: [
         CdkTableModule,
@@ -106,6 +108,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         MatToolbarModule,
         MatTooltipModule,
         ScrollingModule,
+        MatTreeModule,
     ],
     providers: [{
         provide: MatPaginatorIntl,

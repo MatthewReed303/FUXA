@@ -24,6 +24,9 @@ var parametersTableApi = require('./parameters-table');
 var commandApi = require('./command');
 const reports = require('../dist/reports.service');
 const reportsApi = new reports.ReportsApiService();
+const advancedReports = require('../dist/advanced-reports/advanced-reports.service');
+const advancedReportsApi = new advancedReports.AdvancedReportsApiService();
+var pdfmeApi = require('./pdfme');
 const verifyApiOrToken = require('./apikeys/verify-api-or-token');
 const utils = require('../runtime/utils');
 
@@ -77,6 +80,10 @@ function init(_server, _runtime) {
             apiApp.use(commandApi.app());
             reportsApi.init(runtime, authMiddleware, verifyGroups);
             apiApp.use(reportsApi.app());
+            advancedReportsApi.init(runtime, authJwt.verifyToken, verifyGroups);
+            apiApp.use(advancedReportsApi.app());
+            pdfmeApi.init(runtime);
+            apiApp.use(pdfmeApi.app());
             apiKeysApi.init(runtime, authMiddleware, verifyGroups);
             apiApp.use(apiKeysApi.app());
 
