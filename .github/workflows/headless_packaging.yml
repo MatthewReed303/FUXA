@@ -86,12 +86,21 @@ jobs:
 
     - name: Build Standalone Binaries (Headless)
       run: |
-        TARGET="node18-linux-64"
-        if [ "${{ matrix.os }}" = "ubuntu-24.04-arm" ]; then TARGET="node18-linux-arm64"; fi
-        if [ "${{ matrix.os }}" = "windows-latest" ]; then TARGET="node18-win-64"; fi
-        if [ "${{ matrix.os }}" = "macos-latest" ]; then TARGET="node18-macos-64"; fi
-        bash -c "pkg fuxa-headless/package.json --targets $TARGET --out-path fuxa-headless/bin"
-      shell: cmd
+        if [ "$RUNNER_OS" = "Linux" ]; then
+          if [ "${{ matrix.arch }}" = "arm64" ]; then
+            TARGET="node18-linux-arm64"
+          else
+            TARGET="node18-linux-64"
+          fi
+        elif [ "$RUNNER_OS" = "Windows" ]; then
+          TARGET="node18-win-64"
+          bash -c "pkg fuxa-headless/package.json --targets $TARGET --out-path fuxa-headless/bin"
+          exit 0
+        elif [ "$RUNNER_OS" = "macOS" ]; then
+          TARGET="node18-macos-64"
+        fi
+        pkg fuxa-headless/package.json --targets $TARGET --out-path fuxa-headless/bin
+      shell: bash
       working-directory: .
 
     - name: Prepare artifacts
