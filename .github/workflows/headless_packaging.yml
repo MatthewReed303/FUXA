@@ -94,7 +94,7 @@ jobs:
           fi
         elif [ "$RUNNER_OS" = "Windows" ]; then
           TARGET="node18-win-x64"
-          bash -c "pkg fuxa-headless/package.json --targets $TARGET --out-path fuxa-headless/bin"
+          bash -c "pkg fuxa-headless/package.json --targets $TARGET --out-path artifacts"
           exit 0
         elif [ "$RUNNER_OS" = "macOS" ]; then
           if [ "${{ matrix.arch }}" = "arm64" ]; then
@@ -103,23 +103,22 @@ jobs:
             TARGET="node18-macos-x64"
           fi
         fi
-        pkg fuxa-headless/package.json --targets $TARGET --out-path fuxa-headless/bin
+        pkg fuxa-headless/package.json --targets $TARGET --out-path artifacts
       shell: bash
       working-directory: .
 
     - name: Prepare artifacts
       run: |
-        mkdir -p artifacts
         if [ "${{ matrix.os }}" = "windows-latest" ] && [ "${{ matrix.arch }}" = "x64" ]; then
-          mv fuxa-headless/bin/fuxa-headless-win-x64.exe artifacts/FUXA-headless-windows-x64.exe || true
+          mv artifacts/fuxa-headless-win-x64.exe artifacts/FUXA-headless-windows-x64.exe || true
         elif [ "${{ matrix.os }}" = "ubuntu-latest" ] && [ "${{ matrix.arch }}" = "x64" ]; then
-          mv fuxa-headless/bin/fuxa-headless-linux-x64 artifacts/FUXA-headless-linux-x64 || true
+          mv artifacts/fuxa-headless-linux-x64 artifacts/FUXA-headless-linux-x64 || true
         elif [ "${{ matrix.os }}" = "ubuntu-24.04-arm" ] && [ "${{ matrix.arch }}" = "arm64" ]; then
-          mv fuxa-headless/bin/fuxa-headless-linux-arm64 artifacts/FUXA-headless-linux-arm64 || true
+          mv artifacts/fuxa-headless-linux-arm64 artifacts/FUXA-headless-linux-arm64 || true
         elif [ "${{ matrix.os }}" = "macos-latest" ] && [ "${{ matrix.arch }}" = "x64" ]; then
-          mv fuxa-headless/bin/fuxa-headless-macos-x64 artifacts/FUXA-headless-macos-x64 || true
+          mv artifacts/fuxa-headless-macos-x64 artifacts/FUXA-headless-macos-x64 || true
         elif [ "${{ matrix.os }}" = "macos-latest" ]; then
-          mv fuxa-headless/bin/fuxa-headless-macos-arm64 artifacts/FUXA-headless-macos-arm64 || true
+          mv artifacts/fuxa-headless-macos-arm64 artifacts/FUXA-headless-macos-arm64 || true
         fi
       shell: bash
 
