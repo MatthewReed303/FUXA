@@ -52,15 +52,16 @@ jobs:
 
     - name: Setup Headless Package Directory
       run: |
-        mkdir -p fuxa-headless/server
-        mkdir -p fuxa-headless/client/dist
+        mkdir -p fuxa-headless/resources/app
+        mkdir -p fuxa-headless/resources/app/server
+        mkdir -p fuxa-headless/resources/app/client/dist
         
         # Copy everything just like the Electron workflow does
-        cp -r server/. fuxa-headless/server/
-        cp -r client/dist/. fuxa-headless/client/dist/
+        cp -r server/. fuxa-headless/resources/app/server/
+        cp -r client/dist/. fuxa-headless/resources/app/client/dist/
         
-        # Use the entry point as the main file for pkg
-        cp app/headless/headless-entry.js fuxa-headless/main.js
+        # Use the entry point as the main file for SEA
+        cp app/headless/headless-entry.js fuxa-headless/resources/app/main.js
       shell: bash
 
     - name: Install postject
@@ -71,7 +72,7 @@ jobs:
       run: |
         mkdir -p artifacts
         cd fuxa-headless
-        echo '{"main": "main.js", "output": "sea-prep.blob"}' > sea-config.json
+        echo '{"main": "resources/app/main.js", "output": "sea-prep.blob"}' > sea-config.json
         if [ "$RUNNER_OS" = "Linux" ]; then
           if [ "${{ matrix.arch }}" = "arm64" ]; then
             BINARY_NAME="fuxa-headless-linux-arm64"
@@ -90,9 +91,12 @@ jobs:
         cp $(which node) $BINARY_NAME
         node --experimental-sea-config sea-config.json
         npx postject $BINARY_NAME NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2
-        mv $BINARY_NAME ../artifacts/
       shell: bash
       working-directory: .
+
+    - name: Prepare artifacts
+      run: mv fuxa-headless artifacts/
+      shell: bash
 
     - name: Prepare artifacts
       run: |
