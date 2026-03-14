@@ -78,7 +78,8 @@ jobs:
               "server/**/*",
               "client/dist/**/*",
               "_reports/**/*"
-            ]
+            ],
+            "compression": "Brotli"
           }
         }
         EOF

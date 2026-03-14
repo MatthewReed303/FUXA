@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const { fork } = require('child_process');
 
 /**
  * FUXA Headless Entry Point
@@ -16,7 +17,6 @@ async function bootstrap() {
     // 1. Determine the user data directory (similar to Electron app)
     const homeDir = os.homedir();
     const fuxaDataDir = path.join(homeDir, 'fuxa-headless-data');
-    const appDataDir = path.join(fuxaDataDir, '_appdata');
     
     // 2. Ensure the directory exists (Electron-style)
     if (!fs.existsSync(fuxaDataDir)) {
@@ -39,26 +39,31 @@ async function bootstrap() {
         process.exit(1);
     }
 
-    // 4. Launch the server
+    // 4. Launch the server (fork like Electron does)
     console.log(`Launching FUXA server with userDir: ${fuxaDataDir}`);
     
-    // Set the userDir environment variable so the server knows where to look for settings.js
-    process.env.userDir = fuxaDataDir;
-    
-    const args = [
-        '--userDir', fuxaDataDir,
-        ...process.argv.slice(2)
-    ];
+    const serverProcess = fork(serverPath, [], {
+        env: { ...process.env, userDir: fuxaDataDir },
+        stdio: 'inherit'
+    });
 
-    // Modify process.argv so nopt in the server picks up our userDir
-    process.argv = [process.argv[0], serverPath, ...args];
-    
-    try {
-        require(serverPath);
-    } catch (err) {
+    serverProcess.on('error', (err) => {
         console.error(`Failed to start FUXA server: ${err.message}`);
         process.exit(1);
-    }
+    });
+
+    // Keep the process running
+    process.on('SIGINT', () => {
+        console.log('Shutting down FUXA server...');
+        serverProcess.kill('SIGTERM');
+        process.exit(0);
+    });
+
+    process.on('SIGTERM', () => {
+        console.log('Shutting down FUXA server...');
+        serverProcess.kill('SIGTERM');
+        process.exit(0);
+    });
 }
 
 bootstrap();
