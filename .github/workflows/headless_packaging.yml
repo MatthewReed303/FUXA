@@ -86,7 +86,12 @@ jobs:
 
     - name: Build Standalone Binaries (Headless)
       run: |
-        pkg fuxa-headless/package.json --targets node18-linux-x64,node18-win-x64,node18-macos-x64 --out-path fuxa-headless/bin
+        TARGET="node18-linux-64"
+        if [ "${{ matrix.os }}" = "ubuntu-24.04-arm" ]; then TARGET="node18-linux-arm64"; fi
+        if [ "${{ matrix.os }}" = "windows-latest" ]; then TARGET="node18-win-64"; fi
+        if [ "${{ matrix.os }}" = "macos-latest" ]; then TARGET="node18-macos-64"; fi
+        bash -c "pkg fuxa-headless/package.json --targets $TARGET --out-path fuxa-headless/bin"
+      shell: cmd
       working-directory: .
 
     - name: Prepare artifacts
