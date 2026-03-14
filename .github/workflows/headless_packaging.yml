@@ -90,14 +90,18 @@ jobs:
           if [ "${{ matrix.arch }}" = "arm64" ]; then
             TARGET="node18-linux-arm64"
           else
-            TARGET="node18-linux-64"
+            TARGET="node18-linux-x64"
           fi
         elif [ "$RUNNER_OS" = "Windows" ]; then
-          TARGET="node18-win-64"
+          TARGET="node18-win-x64"
           bash -c "pkg fuxa-headless/package.json --targets $TARGET --out-path fuxa-headless/bin"
           exit 0
         elif [ "$RUNNER_OS" = "macOS" ]; then
-          TARGET="node18-macos-64"
+          if [ "${{ matrix.arch }}" = "arm64" ]; then
+            TARGET="node18-macos-arm64"
+          else
+            TARGET="node18-macos-x64"
+          fi
         fi
         pkg fuxa-headless/package.json --targets $TARGET --out-path fuxa-headless/bin
       shell: bash
