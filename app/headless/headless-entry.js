@@ -18,30 +18,11 @@ async function bootstrap() {
     const fuxaDataDir = path.join(homeDir, 'fuxa-headless-data');
     const appDataDir = path.join(fuxaDataDir, '_appdata');
     
-    // 2. Ensure the directory exists
+    // 2. Ensure the directory exists (Electron-style)
     if (!fs.existsSync(fuxaDataDir)) {
         console.log(`Creating initial data directory: ${fuxaDataDir}`);
         try {
             fs.mkdirSync(fuxaDataDir, { recursive: true });
-            
-            // Create all required FUXA subdirectories in the user data folder
-            const subDirs = [
-                '_appdata',
-                '_db',
-                '_images',
-                '_logs',
-                '_pkg',
-                '_reports',
-                '_webcam_snapshots',
-                '_widgets'
-            ];
-
-            for (const subDir of subDirs) {
-                const subDirPath = path.join(fuxaDataDir, subDir);
-                if (!fs.existsSync(subDirPath)) {
-                    fs.mkdirSync(subDirPath, { recursive: true });
-                }
-            }
         } catch (err) {
             console.error(`Failed to create data directory: ${err.message}`);
             process.exit(1);
@@ -51,12 +32,7 @@ async function bootstrap() {
     }
 
     // 3. Resolve the server path
-    // Under pkg, files are in the virtual filesystem. 
-    // The build puts server/ in the same root as the entry point.
-    let serverPath = path.join(__dirname, 'server', 'main.js');
-    if (!fs.existsSync(serverPath)) {
-         serverPath = path.join(__dirname, 'main.js');
-    }
+    const serverPath = path.join(__dirname, 'server', 'main.js');
 
     if (!fs.existsSync(serverPath)) {
         console.error(`Could not find FUXA server at: ${serverPath}`);

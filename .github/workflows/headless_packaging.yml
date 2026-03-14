@@ -33,11 +33,17 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y build-essential unixodbc unixodbc-dev
 
     - name: Install server dependencies
-      run: npm install
+      run: |
+        npm config set fetch-retry-maxtimeout 120000
+        npm config set fetch-retries 5
+        npm install --prefer-offline --no-audit
       working-directory: ./server
 
     - name: Install client dependencies
-      run: npm install
+      run: |
+        npm config set fetch-retry-maxtimeout 120000
+        npm config set fetch-retries 5
+        npm install --prefer-offline --no-audit
       working-directory: ./client
 
     - name: Build client
@@ -48,9 +54,12 @@ jobs:
       run: |
         mkdir -p fuxa-headless/server
         mkdir -p fuxa-headless/client/dist
+        
+        # Copy everything just like the Electron workflow does
         cp -r server/. fuxa-headless/server/
         cp -r client/dist/. fuxa-headless/client/dist/
-        cp -r _reports fuxa-headless/
+        
+        # Use the entry point as the main file for pkg
         cp app/headless/headless-entry.js fuxa-headless/main.js
       shell: bash
 
@@ -100,4 +109,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: FUXA-headless-${{ matrix.os }}-${{ matrix.arch }}
-        path: headless/artifacts/*
+        path: artifacts/*
