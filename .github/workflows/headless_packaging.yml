@@ -26,7 +26,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
 
     - name: Install build dependencies
       if: startsWith(matrix.os, 'ubuntu')
@@ -63,48 +63,34 @@ jobs:
         cp app/headless/headless-entry.js fuxa-headless/main.js
       shell: bash
 
-    - name: Install pkg
-      run: npm install -g pkg
+    - name: Install postject
+      run: npm install -g postject
 
-    - name: Create Package Config
-      run: |
-        cat > fuxa-headless/package.json <<EOF
-        {
-          "name": "fuxa-headless",
-          "version": "1.3.0",
-          "bin": "main.js",
-          "pkg": {
-            "assets": [
-              "server/**/*",
-              "client/dist/**/*",
-              "_reports/**/*"
-            ],
-            "compression": "Brotli"
-          }
-        }
-        EOF
-      shell: bash
 
     - name: Build Standalone Binaries (Headless)
       run: |
+        mkdir -p artifacts
+        cd fuxa-headless
+        echo '{"main": "main.js", "output": "sea-prep.blob"}' > sea-config.json
         if [ "$RUNNER_OS" = "Linux" ]; then
           if [ "${{ matrix.arch }}" = "arm64" ]; then
-            TARGET="node18-linux-arm64"
+            BINARY_NAME="fuxa-headless-linux-arm64"
           else
-            TARGET="node18-linux-x64"
+            BINARY_NAME="fuxa-headless-linux-x64"
           fi
         elif [ "$RUNNER_OS" = "Windows" ]; then
-          TARGET="node18-win-x64"
-          bash -c "pkg fuxa-headless/package.json --targets $TARGET --out-path artifacts"
-          exit 0
+          BINARY_NAME="fuxa-headless-win-x64.exe"
         elif [ "$RUNNER_OS" = "macOS" ]; then
           if [ "${{ matrix.arch }}" = "arm64" ]; then
-            TARGET="node18-macos-arm64"
+            BINARY_NAME="fuxa-headless-macos-arm64"
           else
-            TARGET="node18-macos-x64"
+            BINARY_NAME="fuxa-headless-macos-x64"
           fi
         fi
-        pkg fuxa-headless/package.json --targets $TARGET --out-path artifacts
+        cp $(which node) $BINARY_NAME
+        node --experimental-sea-config sea-config.json
+        npx postject $BINARY_NAME NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2
+        mv $BINARY_NAME ../artifacts/
       shell: bash
       working-directory: .
 
