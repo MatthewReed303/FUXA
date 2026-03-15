@@ -21,11 +21,7 @@
     "build": {
         "appId": "com.frangoteam.fuxa",
         "productName": "FUXA",
-        "asar": true,
-        "asarUnpack": [
-            "**/node_modules/sqlite3/**",
-            "**/node_modules/odbc/**"
-        ],
+        "asar": false,
         "files": [
             "main.js",
             "*.html",

@@ -138,6 +138,9 @@ jobs:
         cp -r client/dist/. app/electron/client/dist
       shell: bash
 
+    - name: Remove unnecessary node_modules
+      run: rm -rf app/electron/server/react/pdfme/node_modules
+
     - name: Install app dependencies for Electron
       run: npx electron-builder install-app-deps
       working-directory: ./app/electron
