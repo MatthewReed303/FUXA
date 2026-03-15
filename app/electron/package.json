@@ -68,6 +68,9 @@
                     "arch": ["x64", "arm64"]
                 }
             ],
+            "dmg": {
+                "size": "1.5GB"
+            },
             "icon": "icons/fuxa-logo.icns"
         }
     }
