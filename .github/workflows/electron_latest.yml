@@ -41,10 +41,24 @@ jobs:
       if: matrix.os == 'macos-latest'
       run: |
         df -h
+        brew uninstall --ignore-dependencies android-commandlinetools || true
+        brew uninstall --ignore-dependencies dotnet || true
+        brew uninstall --ignore-dependencies ghc || true
+        brew uninstall --ignore-dependencies boost || true
         sudo rm -rf /usr/local/lib/android
         sudo rm -rf /usr/local/share/dotnet
         sudo rm -rf /opt/ghc
         sudo rm -rf /usr/local/share/boost
+        sudo rm -rf ~/Library/Caches/*
+        sudo rm -rf ~/Library/Developer/Xcode/DerivedData/*
+        sudo rm -rf ~/Library/Developer/Xcode/iOS\ DeviceSupport/*
+        sudo rm -rf ~/Library/Developer/Xcode/Archives/*
+        sudo rm -rf ~/.npm
+        sudo rm -rf ~/.yarn
+        sudo rm -rf ~/Library/Caches/pip
+        sudo rm -rf ~/.gem
+        sudo rm -rf /var/log/*
+        sudo rm -rf /tmp/*
         brew cleanup
         df -h
 
