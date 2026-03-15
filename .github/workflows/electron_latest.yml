@@ -140,6 +140,7 @@ jobs:
 
     - name: Remove unnecessary node_modules
       run: rm -rf app/electron/server/react/pdfme/node_modules
+      shell: bash
 
     - name: Install app dependencies for Electron
       run: npx electron-builder install-app-deps
