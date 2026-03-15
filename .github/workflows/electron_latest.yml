@@ -18,9 +18,9 @@ jobs:
             arch: arm64
           - os: windows-latest
             arch: x64
-          - os: macos-latest-large
+          - os: macos-latest
             arch: x64
-          - os: macos-latest-xlarge
+          - os: macos-latest
             arch: arm64
     steps:
     - name: Checkout code
@@ -32,10 +32,48 @@ jobs:
         node-version: '18'
 
     - name: Install system dependencies (macOS)
-      if: startsWith(matrix.os, 'macos')
+      if: matrix.os == 'macos-latest'
       run: |
         brew update
         brew install cairo pango pkg-config
+
+    - name: Free up disk space (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        df -h
+        # Remove Android SDK
+        sudo rm -rf /usr/local/lib/android || true
+        # Remove .NET SDKs
+        sudo rm -rf /usr/local/share/dotnet || true
+        # Remove Swift toolchain
+        sudo rm -rf /usr/share/swift || true
+        # Remove Haskell (GHC)
+        sudo rm -rf /usr/local/.ghcup || true
+        # Remove Julia
+        sudo rm -rf /usr/local/julia* || true
+        # Remove Chromium
+        sudo rm -rf /usr/local/share/chromium || true
+        # Remove Microsoft/Edge and Google Chrome builds
+        sudo rm -rf /opt/microsoft /opt/google || true
+        # Remove Azure CLI
+        sudo rm -rf /opt/az || true
+        # Remove PowerShell
+        sudo rm -rf /usr/local/share/powershell || true
+        # Remove CodeQL and other toolcaches
+        sudo rm -rf /opt/hostedtoolcache || true
+        # Remove Xcode caches and other macOS specific
+        sudo rm -rf ~/Library/Caches/* || true
+        sudo rm -rf ~/Library/Developer/Xcode/DerivedData/* || true
+        sudo rm -rf ~/Library/Developer/Xcode/iOS\ DeviceSupport/* || true
+        sudo rm -rf ~/Library/Developer/Xcode/Archives/* || true
+        sudo rm -rf ~/.npm || true
+        sudo rm -rf ~/.yarn || true
+        sudo rm -rf ~/Library/Caches/pip || true
+        sudo rm -rf ~/.gem || true
+        sudo rm -rf /var/log/* || true
+        sudo rm -rf /tmp/* || true
+        brew cleanup || true
+        df -h
 
     - name: Install system dependencies (Linux)
       if: startsWith(matrix.os, 'ubuntu')
@@ -123,7 +161,7 @@ jobs:
       working-directory: ./app/electron
 
     - name: Package for macOS
-      if: startsWith(matrix.os, 'macos')
+      if: matrix.os == 'macos-latest'
       run: |
         sudo sysctl -w kern.maxfiles=65536
         sudo sysctl -w kern.maxfilesperproc=65536
@@ -140,9 +178,9 @@ jobs:
           mv dist/*.AppImage artifacts/FUXA-linux-x64.AppImage
         elif [ "${{ matrix.os }}" = "ubuntu-24.04-arm" ] && [ "${{ matrix.arch }}" = "arm64" ]; then
           mv dist/*.AppImage artifacts/FUXA-linux-arm64.AppImage
-        elif [[ "${{ matrix.os }}" == macos* ]] && [ "${{ matrix.arch }}" = "x64" ]; then
+        elif [ "${{ matrix.os }}" = "macos-latest" ] && [ "${{ matrix.arch }}" = "x64" ]; then
           mv dist/*.dmg artifacts/FUXA-macos-x64.dmg
-        elif [[ "${{ matrix.os }}" == macos* ]]; then
+        elif [ "${{ matrix.os }}" = "macos-latest" ]; then
           mv dist/*.dmg artifacts/FUXA-macos-arm64.dmg
         fi
       working-directory: ./app/electron
