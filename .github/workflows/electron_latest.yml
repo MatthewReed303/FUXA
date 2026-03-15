@@ -37,6 +37,17 @@ jobs:
         brew update
         brew install cairo pango pkg-config
 
+    - name: Free up disk space (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        df -h
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/local/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /usr/local/share/boost
+        brew cleanup
+        df -h
+
     - name: Install system dependencies (Linux)
       if: startsWith(matrix.os, 'ubuntu')
       run: |
