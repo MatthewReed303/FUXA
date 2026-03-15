@@ -18,9 +18,9 @@ jobs:
             arch: arm64
           - os: windows-latest
             arch: x64
-          - os: macos-latest
+          - os: macos-latest-large
             arch: x64
-          - os: macos-latest
+          - os: macos-latest-xlarge
             arch: arm64
     steps:
     - name: Checkout code
@@ -32,35 +32,10 @@ jobs:
         node-version: '18'
 
     - name: Install system dependencies (macOS)
-      if: matrix.os == 'macos-latest'
+      if: startsWith(matrix.os, 'macos')
       run: |
         brew update
         brew install cairo pango pkg-config
-
-    - name: Free up disk space (macOS)
-      if: matrix.os == 'macos-latest'
-      run: |
-        df -h
-        brew uninstall --ignore-dependencies android-commandlinetools || true
-        brew uninstall --ignore-dependencies dotnet || true
-        brew uninstall --ignore-dependencies ghc || true
-        brew uninstall --ignore-dependencies boost || true
-        sudo rm -rf /usr/local/lib/android
-        sudo rm -rf /usr/local/share/dotnet
-        sudo rm -rf /opt/ghc
-        sudo rm -rf /usr/local/share/boost
-        sudo rm -rf ~/Library/Caches/*
-        sudo rm -rf ~/Library/Developer/Xcode/DerivedData/*
-        sudo rm -rf ~/Library/Developer/Xcode/iOS\ DeviceSupport/*
-        sudo rm -rf ~/Library/Developer/Xcode/Archives/*
-        sudo rm -rf ~/.npm
-        sudo rm -rf ~/.yarn
-        sudo rm -rf ~/Library/Caches/pip
-        sudo rm -rf ~/.gem
-        sudo rm -rf /var/log/*
-        sudo rm -rf /tmp/*
-        brew cleanup
-        df -h
 
     - name: Install system dependencies (Linux)
       if: startsWith(matrix.os, 'ubuntu')
@@ -148,7 +123,7 @@ jobs:
       working-directory: ./app/electron
 
     - name: Package for macOS
-      if: matrix.os == 'macos-latest'
+      if: startsWith(matrix.os, 'macos')
       run: |
         sudo sysctl -w kern.maxfiles=65536
         sudo sysctl -w kern.maxfilesperproc=65536
@@ -165,9 +140,9 @@ jobs:
           mv dist/*.AppImage artifacts/FUXA-linux-x64.AppImage
         elif [ "${{ matrix.os }}" = "ubuntu-24.04-arm" ] && [ "${{ matrix.arch }}" = "arm64" ]; then
           mv dist/*.AppImage artifacts/FUXA-linux-arm64.AppImage
-        elif [ "${{ matrix.os }}" = "macos-latest" ] && [ "${{ matrix.arch }}" = "x64" ]; then
+        elif [[ "${{ matrix.os }}" == macos* ]] && [ "${{ matrix.arch }}" = "x64" ]; then
           mv dist/*.dmg artifacts/FUXA-macos-x64.dmg
-        elif [ "${{ matrix.os }}" = "macos-latest" ]; then
+        elif [[ "${{ matrix.os }}" == macos* ]]; then
           mv dist/*.dmg artifacts/FUXA-macos-arm64.dmg
         fi
       working-directory: ./app/electron
