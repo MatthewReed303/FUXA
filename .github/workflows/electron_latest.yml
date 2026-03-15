@@ -61,6 +61,12 @@ jobs:
         sudo rm -rf /usr/local/share/powershell || true
         # Remove CodeQL and other toolcaches
         sudo rm -rf /opt/hostedtoolcache || true
+        # Remove LLVM
+        sudo rm -rf /usr/lib/llvm-* || true
+        # Remove Mono
+        sudo rm -rf /usr/lib/mono || true
+        # Remove pipx
+        sudo rm -rf /opt/pipx || true
         # Remove Xcode caches and other macOS specific
         sudo rm -rf ~/Library/Caches/* || true
         sudo rm -rf ~/Library/Developer/Xcode/DerivedData/* || true
