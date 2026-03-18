@@ -1071,6 +1071,10 @@ export class ProjectService {
         let changed = false;
         for (const key of Object.keys(view.items)) {
             if (!idsInSvg.has(key)) {
+                // Skip SVG widgets as their IDs may not be in the SVG content
+                if (view.items[key].type && view.items[key].type.startsWith('svg-ext-own_ctrl-image')) {
+                    continue;
+                }
                 console.warn('GUI item deleted: ', key);
                 delete view.items[key];
                 changed = true;

@@ -446,7 +446,12 @@ export class FuxaViewComponent implements OnInit, AfterViewInit, OnDestroy {
             if (property.ranges) {
                 property.ranges.forEach((range: GaugeRangeProperty) => {
                     if (range.textId) {
-                        this.applyVariableMappingTo(range.textId, sourceTags);
+                        const mappedText = { variableId: range.textId, variableValue: range.text } as any;
+                        this.applyVariableMappingTo(mappedText, sourceTags);
+                        range.textId = mappedText.variableId;
+                        if (!Utils.isNullOrUndefined(mappedText.variableValue)) {
+                            range.text = mappedText.variableValue;
+                        }
                     }
                 });
             }
